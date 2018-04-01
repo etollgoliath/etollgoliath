@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="Adrian Toșcă">
+		<meta name="description" content="Scan QR Code ">
+		<title> Scan QR Code </title>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
+		<link rel="stylesheet" href="//cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
+	</head>
+	<body>
+            <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+<script src="firebase.js"></script>
+ 
+            <script src="updatejs.js"></script>
+		<main class="wrapper">
+
+			<section class="container" id="demo-content">
+				<h1 class="title">Scan QR Code</h1>
+				
+				
+				<div>
+					<a class="button" id="startButton">Start</a>
+                                        <input type="submit" name="submit" onclick="submitF()" value="Submit">
+				
+				</div>
+
+				<div>
+					<video id="video" width="300" height="200" style="border: 1px solid gray"></video>
+				</div>
+				
+				<div id="sourceSelectPanel" style="display:none">
+					<label for="sourceSelect">Change video source:</label>
+					<select id="sourceSelect" style="max-width:400px">
+					</select>
+				</div>
+
+				<label>Result:</label>
+				<blockquote>
+					<p id="Result"></p>
+                                        <input type="text" name="text" id="result">
+				</blockquote>
+
+					</section>
+
+			<footer class="footer">
+				<section class="container">
+						</section>
+			</footer>
+
+		</main>
+
+		<script type="text/javascript" src="zxing.qrcodereader.min.js"></script>
+        <script type="text/javascript">
+			window.addEventListener('load', function() {
+				const codeReader = new ZXing.BrowserQRCodeReader()
+				console.log('ZXing code reader initialized')
+				codeReader.getVideoInputDevices()
+					.then((videoInputDevices) => {
+						const sourceSelect = document.getElementById('sourceSelect')
+						const firstDeviceId = videoInputDevices[0].deviceId
+						if (videoInputDevices.length > 1) {
+							videoInputDevices.forEach((element) => {
+								const sourceOption = document.createElement('option')
+								sourceOption.text = element.label
+								sourceOption.value = element.deviceId
+								sourceSelect.appendChild(sourceOption)
+							})
+							const sourceSelectPanel = document.getElementById('sourceSelectPanel')
+							sourceSelectPanel.style.display = 'block'
+						}
+						document.getElementById('startButton').addEventListener('click', () => {
+							codeReader.decodeFromInputVideoDevice(firstDeviceId, 'video').then((result) => {
+								console.log(result)
+								document.getElementById('result').value = result.text;
+                                                                alert("you can now remove your hand ");
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                 setTimeout("location.reload(true);", 20000);
+							}).catch((err) => {
+								console.error(err)
+								document.getElementById('result').textContent = err
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+							})
+							console.log(`Started continous decode from camera with id ${firstDeviceId}`)
+						})
+						document.getElementById('resetButton').addEventListener('click', () => {
+							codeReader.reset()
+							console.log('Reset.')
+						})
+					})
+					.catch((err) => {
+						console.error(err)
+					})
+			})
+		</script>
+
+	</body>
+</html>
